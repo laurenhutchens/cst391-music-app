@@ -14,7 +14,7 @@ export default function Home() {
           priority
         />
         <div className={styles.intro}>
-          <h1>Lauren Hutchens — To get started, edit the page.tsx file.</h1>
+          <h1>Hi my name is Lauren and I am a student studying Software Development!</h1>
           <p>
             Looking for a starting point or more instructions? Head over to{" "}
             <a
