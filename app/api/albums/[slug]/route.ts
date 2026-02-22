@@ -1,7 +1,9 @@
-// app/api/albums/[slug]/route.ts
+
+// app\api\albums\[slug]\route.ts
 import { NextRequest, NextResponse } from 'next/server';
 import { getPool } from '@/lib/db';
 import { Album, Track } from '@/lib/types';
+
 
 export const runtime = 'nodejs';
 
@@ -10,6 +12,7 @@ export async function GET(
   context: { params: Promise<{ slug: string }> }
 ) {
   const { slug: artistName } = await context.params;
+  console
   try {
     const pool = getPool();
     const albumsRes = await pool.query(
