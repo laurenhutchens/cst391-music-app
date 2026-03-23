@@ -1,0 +1,26 @@
+[
+  {
+    "id": 0,
+    "title": "Abbey Road",
+    "artist": "The Beatles",
+    "description": "Abbey Road is the eleventh studio album by English rock band the Beatles, released on 26 September 1969 by Apple Records.",
+    "year": 1969,
+    "image": "https://upload.wikimedia.org/wikipedia/en/4/42/Beatles_-_Abbey_Road.jpg"
+  },
+  {
+    "id": 1,
+    "title": "Let it be",
+    "artist": "The Beatles",
+    "description": "Let It Be is the twelfth and final studio album by the English rock band the Beatles. It was released on 8 May 1978, almost a month after the group's break-up.",
+    "year": 1978,
+    "image": "https://upload.wikimedia.org/wikipedia/en/2/25/LetItBe.jpg"
+  },
+  {
+    "id": 2,
+    "title": "Sgt. Pepper's Lonely Hearts Club Band",
+    "artist": "The Beatles",
+    "description": "Sgt. Pepper's Lonely Hearts Club Band is the eighth studio album by the English rock band the Beatles.",
+    "year": 1967,
+    "image": "https://upload.wikimedia.org/wikipedia/en/5/58/Sgt._Pepper%27s_Lonely_Hearts_Club_Band.jpg"
+  }
+]

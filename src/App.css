@@ -1,0 +1,27 @@
+/* App styles */
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 1rem;
+}
+
+.album-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.5rem;
+}
+
+.card {
+  width: 280px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  overflow: hidden;
+  padding: 1rem;
+}
+
+.card img {
+  width: 100%;
+  height: auto;
+  display: block;
+  background: #f0f0f0;
+}

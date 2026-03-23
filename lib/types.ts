@@ -15,3 +15,21 @@ export interface Album {
   description?: string | null;
   tracks?: Track[];
 }
+
+export interface User {
+  id?: number;
+  email: string;
+  role: 'customer' | 'admin';
+  created_at?: string;
+}
+
+export interface Review {
+  id?: number;
+  track_id: number;
+  user_id: number;
+  rating: number;
+  comment?: string;
+  is_hidden?: boolean;
+  created_at?: string;
+  updated_at?: string;
+}
