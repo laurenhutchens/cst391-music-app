@@ -5,16 +5,17 @@
 
 import { useState, useEffect } from "react";
 import NavBar from "./components/NavBar";
+import AlbumCard from "./components/AlbumCard";
+import { Album } from "@/lib/types";
 //import SearchAlbum from "../components/SearchAlbum"; // CHANGED: adjust import paths for /app structure
 // import EditAlbum from "../components/EditAlbum";
 // import OneAlbum from "../components/OneAlbum";
-// import dataSource from "../lib/dataSource"; // CHANGED: move dataSource to /lib for Next.js convention
 import { useRouter } from "next/navigation"; // CHANGED: replace BrowserRouter + navigate() with Next.js router
 
 // CHANGED: In Next.js, "App" is replaced by a route-level component called page.tsx
 export default function Page() {
   const [searchPhrase, setSearchPhrase] = useState("");
-  const [albumList, setAlbumList] = useState<any[]>([]);
+  const [albumList, setAlbumList] = useState<Album[]>([]);
   const [currentlySelectedAlbumId, setCurrentlySelectedAlbumId] = useState(0);
 
   let router = useRouter(); // CHANGED: replaces BrowserRouter + navigate()
@@ -94,8 +95,14 @@ export default function Page() {
         {albumList.length > 0 && JSON.stringify(albumList, null, 2)}
       </pre>
 
-      {/* CHANGED: simple conditional view */}
       {albumList.length === 0 && <p>Loading albums...</p>}
+
+      {albumList.length > 0 && (
+        <AlbumCard
+          album={albumList[0]}
+          onClick={(album, uri) => router.push(`${uri}${album.id}`)}
+        />
+      )}
     </main>
   );
 }

@@ -6,7 +6,6 @@ import NavBar from './NavBar';
 import EditAlbum from './EditAlbum';
 import OneAlbum from './OneAlbum';
 import './App.css';
-import dataSource from './dataSource';
 
 const App = () => {
   const [searchPhrase, setSearchPhrase] = useState('');
@@ -16,9 +15,8 @@ const App = () => {
   let refresh = false;
 
   const loadAlbums = async () => {
-    const response = await dataSource.get('/albums');
-
-    setAlbumList(response.data);
+    const response = await fetch('/api/albums').then(r => r.json());
+    setAlbumList(response);
   };
 
   // Setup initialization callback
@@ -30,11 +28,6 @@ const App = () => {
   const updateSearchResults = async (phrase) => {
     console.log('phrase is ' + phrase);
     setSearchPhrase(phrase);
-    //      const response = await dataSource.get(
-    //          '/albums/search/description/' + phrase
-    //      );
-
-    //      setAlbumList(response.data);
   };
 
   const onEditAlbum = (navigate) => {

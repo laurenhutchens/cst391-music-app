@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import dataSource from './dataSource';
 import { useNavigate } from 'react-router-dom';
 
 const EditAlbum = (props) => {
@@ -67,11 +66,10 @@ const EditAlbum = (props) => {
     const saveAlbum = async (album) => {
         let response;
         if (newAlbumCreation)
-            response = await dataSource.post('/albums', album);
+            response = await fetch('/api/albums', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(album) }).then(r => r.json());
         else
-            response = await dataSource.put('/albums', album);
+            response = await fetch('/api/albums', { method: 'PUT', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(album) }).then(r => r.json());
         console.log(response);
-        console.log(response.data);
         props.onEditAlbum(navigate);
     };
 

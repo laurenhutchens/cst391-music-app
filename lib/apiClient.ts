@@ -1,6 +1,7 @@
 // src/lib/apiClient.ts
 // Internal API client for Next.js (Vercel-safe)
 // Exports only typed helper functions for clarity and safety.
+
 // NOTE on `body?: unknown`:
 //   `unknown` allows any input type but keeps type checking active.
 //   It's safer than `any` — you can pass any value, but you can't
@@ -29,6 +30,7 @@ async function request<T>(
     }
 
     const text = await response.text();
+
     try {
         return text ? (JSON.parse(text) as T) : ({} as T);
     } catch {

@@ -1,65 +1,62 @@
-// app/edit/[albumId]/page.tsx
+// app/page.tsx
 "use client";
 
-import { get } from "@/lib/apiClient";
-import { Album, Track } from "@/lib/types";
-import { useParams, useRouter } from "next/navigation";
 import { useState, useEffect } from "react";
+import { get } from "@/lib/apiClient";
+import { Album } from "@/lib/types";
+import NavBar from "@/app/components/NavBar";
+import { useRouter } from "next/navigation";
 
-export default function EditAlbumPage() {
-    const router = useRouter();
-    // Next.js params hook replaces useParams from react-router
-    const params = useParams();
-    const albumId = params?.albumId; // undefined under /new
-    const defaultAlbum: Album = {
-        id: 0,
-        title: "",
-        artist: "",
-        description: "",
-        year: 0,
-        image: "",
-        tracks: [] as Track[],
-    };
+export default function Page() {
+  const [albumList, setAlbumList] = useState<Album[]>([]);
+  const [error, setError] = useState<string | null>(null);
+  let router = useRouter();
 
-    // Type safe use of defaultAlbum to initialize state
-    // Rather than the ad hoc album object used previously, this ensures correct typing and calms TypeScript
-    const [album, setAlbum] = useState(defaultAlbum);
+  const loadAlbums = async () => {
+    try {
+      const data = await get<Album[]>("/api/albums");
+      setAlbumList(data);
+      setError(null);
+    } catch (err) {
+      setError((err as Error).message);
+    }
+  };
 
-    // Load album only when editing
-    useEffect(() => {
-        if (!albumId) return; // creation mode
-        (async () => {
-            const res = await get<Album>(`/albums/${albumId}`);
-            setAlbum(res);
-        })();
-    }, [albumId]);
+  useEffect(() => {
+    loadAlbums();
+  }, []);
 
-    const handleSubmit = async (e: React.FormEvent) => {
-        e.preventDefault();
-        const method = albumId ? "PUT" : "POST";
-        const url = albumId ? `/api/albums/${albumId}` : `/api/albums`;
-        await fetch(url, {
-            method,
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(album),
-        });
-        router.push("/");
-    };
+  return (
+    <main>
+      <NavBar />
+      <h1>Sparks Album List (Debug View) — Lauren Hutchens</h1>
+      <p>This JSON data is rendered directly from the API response.</p>
 
-    const onChange = (key: string) => (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) =>
-        setAlbum((prev) => ({ ...prev, [key]: e.target.value }));
+      {error ? (
+        <div style={{
+          backgroundColor: "#ffe0e0",
+          padding: "1rem",
+          borderRadius: "8px",
+          color: "red",
+          fontWeight: "bold",
+        }}>
+          Error: {error}
+        </div>
+      ) : (
+        <pre style={{
+          backgroundColor: "#f4f4f4",
+          padding: "1rem",
+          borderRadius: "8px",
+          overflow: "auto",
+          color: "#111",
+          fontSize: "0.9rem",
+          lineHeight: "1.4",
+        }}>
+          {albumList.length > 0 && JSON.stringify(albumList, null, 2)}
+        </pre>
+      )}
 
-    return (
-        <main style={{ padding: "1rem" }}>
-            <h1>{albumId ? "Edit Album" : "Create Album"}</h1>
-            <form onSubmit={handleSubmit}>
-                <input placeholder="Title" value={album.title} onChange={onChange("title")} />
-                <input placeholder="Artist" value={album.artist} onChange={onChange("artist")} />
-                <input placeholder="Year" value={album.year ?? ''} onChange={onChange("year")} />
-                <textarea placeholder="Description" value={album.description ?? ''} onChange={onChange("description")} />
-                <input placeholder="Image URL" value={album.image ?? ''} onChange={onChange("image")} />
-                <button type="submit">{albumId ? "Update" : "Save"}</button>
-            </form>
-        </main>
-    );
+      {albumList.length === 0 && !error && <p>Loading albums...</p>}
+    </main>
+  );
 }
