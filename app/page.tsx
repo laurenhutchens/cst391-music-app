@@ -5,7 +5,7 @@
 
 import { useState, useEffect } from "react";
 import NavBar from "./components/NavBar";
-import AlbumCard from "./components/AlbumCard";
+import AlbumList from "./components/AlbumList";
 import { Album } from "@/lib/types";
 //import SearchAlbum from "../components/SearchAlbum"; // CHANGED: adjust import paths for /app structure
 // import EditAlbum from "../components/EditAlbum";
@@ -98,8 +98,8 @@ export default function Page() {
       {albumList.length === 0 && <p>Loading albums...</p>}
 
       {albumList.length > 0 && (
-        <AlbumCard
-          album={albumList[0]}
+        <AlbumList
+          albumList={albumList}
           onClick={(album, uri) => router.push(`${uri}${album.id}`)}
         />
       )}
