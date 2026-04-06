@@ -5,7 +5,7 @@
 
 import { useState, useEffect } from "react";
 import NavBar from "./components/NavBar";
-import AlbumList from "./components/AlbumList";
+import SearchAlbum from "./components/SearchAlbum";
 import { Album } from "@/lib/types";
 //import SearchAlbum from "../components/SearchAlbum"; // CHANGED: adjust import paths for /app structure
 // import EditAlbum from "../components/EditAlbum";
@@ -98,9 +98,10 @@ export default function Page() {
       {albumList.length === 0 && <p>Loading albums...</p>}
 
       {albumList.length > 0 && (
-        <AlbumList
+        <SearchAlbum
           albumList={albumList}
-          onClick={(album, uri) => router.push(`${uri}${album.id}`)}
+          updateSearchResults={(phrase) => console.log("search:", phrase)}
+          updateSingleAlbum={(album, uri) => router.push(`${uri}${album.id}`)}
         />
       )}
     </main>

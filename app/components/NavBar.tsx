@@ -1,5 +1,6 @@
 'use client';
 
+
 import Link from 'next/link';
 import { useEffect } from 'react';
 
@@ -32,6 +33,9 @@ export default function NavBar() {
           </Link>
           <Link href="/new" className="nav-item nav-link">
             New
+          </Link>
+          <Link href="/about" className="nav-item nav-link">
+            About
           </Link>
         </div>
       </div>

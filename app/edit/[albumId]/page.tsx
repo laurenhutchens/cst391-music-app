@@ -1,62 +1,103 @@
-// app/page.tsx
-"use client";
+'use client';
 
-import { useState, useEffect } from "react";
-import { get } from "@/lib/apiClient";
+import { Suspense, useState, useEffect } from "react";
+import { useParams, useSearchParams, useRouter } from "next/navigation";
+import { get, put } from "@/lib/apiClient";
 import { Album } from "@/lib/types";
 import NavBar from "@/app/components/NavBar";
-import { useRouter } from "next/navigation";
 
-export default function Page() {
-  const [albumList, setAlbumList] = useState<Album[]>([]);
+function EditAlbumInner() {
+  const params = useParams();
+  const searchParams = useSearchParams();
+  const router = useRouter();
+  const albumId = (params?.albumId ?? "") as string;
+  const readOnly = searchParams?.get("mode") === "view";
+
+  const [album, setAlbum] = useState<Album | null>(null);
   const [error, setError] = useState<string | null>(null);
-  let router = useRouter();
 
-  const loadAlbums = async () => {
+  useEffect(() => {
+    get<Album>(`/albums/${albumId}`)
+      .then(setAlbum)
+      .catch((err) => setError((err as Error).message));
+  }, [albumId]);
+
+  const onChange = (field: keyof Album) =>
+    (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) =>
+      setAlbum((prev) => prev ? { ...prev, [field]: e.target.value } : prev);
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!album) return;
     try {
-      const data = await get<Album[]>("/api/albums");
-      setAlbumList(data);
-      setError(null);
+      await put<Album, Album>(`/albums/${albumId}`, album);
+      router.push("/");
     } catch (err) {
       setError((err as Error).message);
     }
   };
 
-  useEffect(() => {
-    loadAlbums();
-  }, []);
+  if (error) return <p style={{ color: "red" }}>Error: {error}</p>;
+  if (!album) return <p>Loading...</p>;
 
+  return (
+    <div className="container my-4">
+      <h1>{readOnly ? "View Album" : "Edit Album"}</h1>
+
+      {readOnly ? (
+        <div>
+          <p><strong>Title:</strong> {album.title}</p>
+          <p><strong>Artist:</strong> {album.artist}</p>
+          <p><strong>Year:</strong> {album.year}</p>
+          <p><strong>Description:</strong> {album.description}</p>
+          <p><strong>Image URL:</strong> {album.image}</p>
+          <button className="btn btn-secondary" onClick={() => router.push("/")}>
+            Home
+          </button>
+        </div>
+      ) : (
+        <form onSubmit={handleSubmit}>
+          <div className="form-group my-2">
+            <label>Title</label>
+            <input className="form-control" value={album.title ?? ""} onChange={onChange("title")} />
+          </div>
+          <div className="form-group my-2">
+            <label>Artist</label>
+            <input className="form-control" value={album.artist ?? ""} onChange={onChange("artist")} />
+          </div>
+          <div className="form-group my-2">
+            <label>Year</label>
+            <input className="form-control" value={album.year ?? ""} onChange={onChange("year")} />
+          </div>
+          <div className="form-group my-2">
+            <label>Description</label>
+            <textarea className="form-control" value={album.description ?? ""} onChange={onChange("description")} />
+          </div>
+          <div className="form-group my-2">
+            <label>Image URL</label>
+            <input className="form-control" value={album.image ?? ""} onChange={onChange("image")} />
+          </div>
+          <div className="mt-3">
+            <button type="button" className="btn btn-secondary me-2" onClick={() => router.push("/")}>
+              Cancel
+            </button>
+            <button type="submit" className="btn btn-primary">
+              Save
+            </button>
+          </div>
+        </form>
+      )}
+    </div>
+  );
+}
+
+export default function EditAlbumPage() {
   return (
     <main>
       <NavBar />
-      <h1>Sparks Album List (Debug View) — Lauren Hutchens</h1>
-      <p>This JSON data is rendered directly from the API response.</p>
-
-      {error ? (
-        <div style={{
-          backgroundColor: "#ffe0e0",
-          padding: "1rem",
-          borderRadius: "8px",
-          color: "red",
-          fontWeight: "bold",
-        }}>
-          Error: {error}
-        </div>
-      ) : (
-        <pre style={{
-          backgroundColor: "#f4f4f4",
-          padding: "1rem",
-          borderRadius: "8px",
-          overflow: "auto",
-          color: "#111",
-          fontSize: "0.9rem",
-          lineHeight: "1.4",
-        }}>
-          {albumList.length > 0 && JSON.stringify(albumList, null, 2)}
-        </pre>
-      )}
-
-      {albumList.length === 0 && !error && <p>Loading albums...</p>}
+      <Suspense fallback={<p>Loading...</p>}>
+        <EditAlbumInner />
+      </Suspense>
     </main>
   );
 }
