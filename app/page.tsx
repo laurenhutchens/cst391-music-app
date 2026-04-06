@@ -4,7 +4,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-// import NavBar from "../components/NavBar";
+import NavBar from "./components/NavBar";
 //import SearchAlbum from "../components/SearchAlbum"; // CHANGED: adjust import paths for /app structure
 // import EditAlbum from "../components/EditAlbum";
 // import OneAlbum from "../components/OneAlbum";
@@ -68,7 +68,7 @@ export default function Page() {
   // For demo, this page shows the search UI by default.
   return (
     <main>
-      {/* <NavBar /> */}
+      <NavBar />
       {/* CHANGED: Render SearchAlbum directly here; other routes (new, edit, show)
           will be separate pages: /new/page.tsx, /edit/[albumId]/page.tsx, etc. */}
       {/* <SearchAlbum
