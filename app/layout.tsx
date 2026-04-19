@@ -2,10 +2,12 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./globals.css";
+import SessionWrapper from "./SessionWrapper";
 
 export const metadata: Metadata = {
   title: "Music App",
   description: "Music album app",
+  icons: { icon: "/icon.svg" },
 };
 
 export default function RootLayout({
@@ -16,7 +18,9 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body>
-        {children}
+        <SessionWrapper>
+          {children}
+        </SessionWrapper>
       </body> 
     </html>
   );

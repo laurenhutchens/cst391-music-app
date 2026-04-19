@@ -25,7 +25,7 @@ INSERT INTO "albums" VALUES
     (13,'Let It Be','The Beatles',1970,'https://upload.wikimedia.org/wikipedia/en/2/25/LetItBe.jpg?20210101011032','Let It Be is the twelfth and final studio albums by the English rock band the Beatles. It was released on 8 May 1970, almost a month after the group''s break-up.');
 
 
-DROP TABLE IF EXISTS "tracks";
+DROP TABLE IF EXISTS "tracks" CASCADE;
 CREATE TABLE "tracks" (
   "id" SERIAL,
   "album_id" integer NOT NULL,
