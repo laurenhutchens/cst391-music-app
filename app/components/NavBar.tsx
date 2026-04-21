@@ -30,11 +30,16 @@ export default function NavBar() {
       </button>
       <div className="collapse navbar-collapse" id="navbarNavAltMarkup">
         <div className="navbar-nav">
-          {isAdmin && (
-            <Link href="/new" className="nav-item nav-link">
-              New Album
-            </Link>
-          )}
+        {isAdmin && (
+    <>                                                                                 
+      <Link href="/new" className="nav-item nav-link">
+        New Album                                                                      
+      </Link>     
+      <Link href="/admin/reviews" className="nav-item nav-link">
+        Manage Reviews
+      </Link>
+    </>                                                                                
+  )}
           <Link href="/" className="nav-item nav-link">
             Albums
           </Link>
